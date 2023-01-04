@@ -1,9 +1,9 @@
 package = "kong-plugin-upstream-auth-basic"
-version = "VERSION"
+version = "1.0.0-1"
 supported_platforms = {"linux", "macosx"}
 source = {
   url = "git://github.com/GITHUB_PROJECT.git",
-  tag = "VERSION"
+  tag = "1.0.0-1"
 }
 description = {
   summary = "Kong Plugin for Upstream HTTP Basic Authentication",

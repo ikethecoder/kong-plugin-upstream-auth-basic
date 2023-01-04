@@ -1,25 +1,25 @@
-local BasePlugin = require "kong.plugins.base_plugin"
-local req_set_header = ngx.req.set_header
+local plugin = {
+  PRIORITY = 850,
+  VERSION = "1.0.0",
+}
 
-local UpstreamAuthBasicHandler = BasePlugin:extend()
-
-function UpstreamAuthBasicHandler:new()
-  UpstreamAuthBasicHandler.super.new(self, "upstream-auth-basic")
-end
-
-function UpstreamAuthBasicHandler:access(conf)
-  UpstreamAuthBasicHandler.super.access(self)
+function plugin:access(conf)
 
   local username = conf.username
   local password = conf.password or ''
-  
-  local authorization = username .. ':' .. password;
-  local authorizationBase64 = ngx.encode_base64(authorization);
-  local authorizationHeader = "Basic " .. authorizationBase64;
-  req_set_header("Authorization", authorizationHeader)
+
+  local auth_string = username .. ':' .. password;
+
+  local auth_string_base64 = ngx.encode_base64(auth_string);
+  local auth_header = "Basic " .. auth_string_base64;
+  kong.service.request.set_header("Authorization", auth_header)
 
 end
 
-UpstreamAuthBasicHandler.PRIORITY = 850
+function plugin:header_filter(conf)
+  
+  -- maybe remove the authorization header?
+  
+end
 
-return UpstreamAuthBasicHandler
+return plugin
